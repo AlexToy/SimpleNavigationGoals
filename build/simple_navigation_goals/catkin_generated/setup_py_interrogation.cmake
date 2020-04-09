@@ -1,0 +1,6 @@
+set(simple_navigation_goals_SETUP_PY_VERSION "0.0.0")
+set(simple_navigation_goals_SETUP_PY_SCRIPTS "")
+set(simple_navigation_goals_SETUP_PY_PACKAGES "simple_navigation_goals")
+set(simple_navigation_goals_SETUP_PY_PACKAGE_DIRS "src/simple_navigation_goals")
+set(simple_navigation_goals_SETUP_PY_MODULES "")
+set(simple_navigation_goals_SETUP_PY_MODULE_DIRS "")
