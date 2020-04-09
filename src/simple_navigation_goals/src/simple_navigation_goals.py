@@ -20,6 +20,7 @@ class SimpleNavigationGoals():
             return
         rospy.loginfo("Connecting to move base server")
         rospy.loginfo("Starting goals achievements")
+        print("ok")
 
 
     def go_to(self, x, y, theta):
