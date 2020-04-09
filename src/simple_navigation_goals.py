@@ -39,4 +39,9 @@ class SimpleNavigationGoals():
         else:
             return self.client.get_result()
 
-nav = SimpleNavigationGoals()
+
+if __name__ == "__main__":
+    try:
+        SimpleNavigationGoals()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("Navigation finished.")
