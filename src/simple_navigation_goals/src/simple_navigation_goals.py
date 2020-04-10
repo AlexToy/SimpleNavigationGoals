@@ -29,6 +29,7 @@ class SimpleNavigationGoals():
         rospy.loginfo("sending goal pose "+str(goal.target_pose.pose.position.x)+
         ", "+str(goal.target_pose.pose.position.y)+", "+str(goal.target_pose.pose.orientation)+ " to action server")
         client.send_goal(goal)
+        print("new goal")
         wait = client.wait_for_result()
         if not wait:
             rospy.logerr("Action server not available !")
@@ -40,6 +41,3 @@ class SimpleNavigationGoals():
     def _shutdown(self):
         rospy.signal_shutdown("Shutdown")
 
-
-s = SimpleNavigationGoals()
-s.go_to(0, 0, 0)
