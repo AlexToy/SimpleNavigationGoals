@@ -1,0 +1,6 @@
+set(catie_particle_handler_SETUP_PY_VERSION "0.0.0")
+set(catie_particle_handler_SETUP_PY_SCRIPTS "")
+set(catie_particle_handler_SETUP_PY_PACKAGES "catie_particle_handler")
+set(catie_particle_handler_SETUP_PY_PACKAGE_DIRS "src/catie_particle_handler")
+set(catie_particle_handler_SETUP_PY_MODULES "")
+set(catie_particle_handler_SETUP_PY_MODULE_DIRS "")

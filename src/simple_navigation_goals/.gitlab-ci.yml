@@ -1,0 +1,11 @@
+stages:
+  - black
+
+black:
+  stage: black
+  image: registry.gitlab.com/catie_robotics/methods/continuous_integration
+  script:
+    - python3 /continuous_integration/black-ci.py
+  artifacts:
+    paths:
+      - black.svg
