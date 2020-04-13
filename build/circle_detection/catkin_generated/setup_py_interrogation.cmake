@@ -1,0 +1,6 @@
+set(circle_detection_SETUP_PY_VERSION "0.0.0")
+set(circle_detection_SETUP_PY_SCRIPTS "")
+set(circle_detection_SETUP_PY_PACKAGES "simple_navigation_goals")
+set(circle_detection_SETUP_PY_PACKAGE_DIRS "src/simple_navigation_goals")
+set(circle_detection_SETUP_PY_MODULES "")
+set(circle_detection_SETUP_PY_MODULE_DIRS "")

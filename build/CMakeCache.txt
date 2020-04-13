@@ -761,6 +761,12 @@ catie_test_scenario_SOURCE_DIR:STATIC=/home/alex/catkin_ws/src/catie_test_scenar
 //The directory containing a CMake configuration file for catkin.
 catkin_DIR:PATH=/opt/ros/melodic/share/catkin/cmake
 
+//Value Computed by CMake
+circle_detection_BINARY_DIR:STATIC=/home/alex/catkin_ws/build/circle_detection
+
+//Value Computed by CMake
+circle_detection_SOURCE_DIR:STATIC=/home/alex/catkin_ws/src/circle_detection
+
 //The directory containing a CMake configuration file for class_loader.
 class_loader_DIR:PATH=/opt/ros/melodic/share/class_loader/cmake
 
@@ -1386,7 +1392,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=18
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=19
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
