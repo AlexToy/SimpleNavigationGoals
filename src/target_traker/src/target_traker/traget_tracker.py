@@ -6,6 +6,7 @@ from sensor_msgs.msg import LaserScan
 from obstacle_detector.msg._Obstacles import Obstacles
 #from simple_navigation_goals import simple_navigation_goals
 from move_base_msgs.msg import MoveBaseActionFeedback
+from geometry_msgs.msg import Twist
 
 #Constantes
 TARGET_RADIUS = 0.24
@@ -28,6 +29,7 @@ class Target():
         )
 
     def target_callback(self, msg):
+        print("ok")
         #Target not find
         if not msg.circles:
             print("target not find")
@@ -128,20 +130,31 @@ class Robot():
 if __name__ == "__main__":
     rospy.init_node('scan_values')
     #nav_goals = simple_navigation_goals.SimpleNavigationGoals()
-    t = Target()
-    r = Robot()
-    rospy.spin()
+    target = Target()
+    robot = Robot()
+    twist = Twist()
 
-    #while True:
-        #if state == 0:
+    while True:
+        #time.sleep(0.1)
+        if state == 0:
+            #State 0 : Save initialisation position. It will be use in state 3 to come back at this position.
+            #While position subscriber did not save a first position we did'nt go to the next state.
+            #Problem : without first movement /feedback do not send a position
+            #print("first move")
+            twist.linear.x = 1
             #print("State 1 : Set initial position")
-            #if not r.pos_x:
+            if not robot.pos_x:
+                None
                 #print("list vide")
-           # else:
-                #r.initial_pos_x = r.pos_x[0]
-                #r.initial_pos_y = r.pos_y[0]
+            else:
+                robot.initial_pos_x = robot.pos_x[0]
+                robot.initial_pos_y = robot.pos_y[0]
                 #print("added initial pos of robot")
+                twist.linear.x = 0
                 #state = 1
+            
+        elif state == 1:
+            print("state 2")
+    rospy.spin()
+                
         
-        #elif state == 1:
-            #print("State 2 : follow the target")
