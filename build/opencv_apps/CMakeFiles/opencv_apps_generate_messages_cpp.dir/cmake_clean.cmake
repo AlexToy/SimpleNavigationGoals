@@ -1,0 +1,40 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/opencv_apps_generate_messages_cpp"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Point2D.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Point2DStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Point2DArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Point2DArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Rect.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/RectArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/RectArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Flow.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/FlowStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/FlowArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/FlowArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Size.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Face.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/FaceArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/FaceArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Line.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/LineArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/LineArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/RotatedRect.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/RotatedRectStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/RotatedRectArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/RotatedRectArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Circle.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/CircleArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/CircleArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Moment.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/MomentArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/MomentArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/Contour.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/ContourArray.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/ContourArrayStamped.h"
+  "/home/alex/catkin_ws/devel/include/opencv_apps/FaceRecognitionTrain.h"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang )
+  include(CMakeFiles/opencv_apps_generate_messages_cpp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

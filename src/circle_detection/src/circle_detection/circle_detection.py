@@ -3,8 +3,15 @@ import rospy
 import math
 from sensor_msgs.msg import LaserScan
 
+
+
 def callback(msg):
-    print(msg.ranges)
+    i=0
+    for _ in msg.ranges:
+        i = i +1
+    print(i)
+    print("#####################################--FIN--##########################################")
+    
 
 
 rospy.init_node('scan_values')

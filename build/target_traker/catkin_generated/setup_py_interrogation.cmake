@@ -1,0 +1,6 @@
+set(target_traker_SETUP_PY_VERSION "0.0.0")
+set(target_traker_SETUP_PY_SCRIPTS "")
+set(target_traker_SETUP_PY_PACKAGES "simple_navigation_goals")
+set(target_traker_SETUP_PY_PACKAGE_DIRS "src/simple_navigation_goals")
+set(target_traker_SETUP_PY_MODULES "")
+set(target_traker_SETUP_PY_MODULE_DIRS "")
