@@ -9,8 +9,8 @@ from move_base_msgs.msg import MoveBaseActionFeedback
 
 #Constantes
 TARGET_RADIUS = 0.24
-TARGET_RADIUS_SAFETY_MARGIN = 0.05
-TARGET_MOVE_SAFETY_MARGIN = 0.1
+TARGET_RADIUS_SAFETY_MARGIN = 0.1
+TARGET_MOVE_SAFETY_MARGIN = 0.25
 
 state = 0
 
@@ -39,57 +39,73 @@ class Target():
             msg.circles[0].true_radius <= (TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN) and 
             msg.circles[0].true_radius >= (TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN) ):
 
-            self.init_target_x = self.target_x
-            self.init_target_y = self.target_y
+            self.init_target_x = msg.circles[0].center.x
+            self.init_target_y = msg.circles[0].center.y
             self.init_state = False
             print("inital target position ...")
+            print("inital position x = ", self.init_target_x)
+            print("inital position y = ", self.init_target_y)
             return
 
         #Target found
         elif len(msg.circles) == 1 and self.init_state == False:
             print("target found !")
             #Radius is possible ?
-            if ( msg.circles[0].true_radius <= (TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN) and 
-                msg.circles[0].true_radius >= (TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN) ):
+            if (msg.circles[0].true_radius <= (TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN) and 
+                msg.circles[0].true_radius >= (TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN)):
                 #Target x position is possible ?
-                if ( msg.circles[0].center.x <= (self.init_target_x + TARGET_MOVE_SAFETY_MARGIN) and
-                    msg.circles[0].center.x >= (self.init_target_x - TARGET_MOVE_SAFETY_MARGIN) ):
+                if (msg.circles[0].center.x <= (self.init_target_x + TARGET_MOVE_SAFETY_MARGIN) and
+                    msg.circles[0].center.x >= (self.init_target_x - TARGET_MOVE_SAFETY_MARGIN)):
                     #Target y position is possible ?
-                    if ( msg.circles[0].center.y <= (self.init_target_y + TARGET_MOVE_SAFETY_MARGIN) and
-                        msg.circles[0].center.y >= (self.init_target_y - TARGET_MOVE_SAFETY_MARGIN) ):
+                    if (msg.circles[0].center.y <= (self.init_target_y + TARGET_MOVE_SAFETY_MARGIN) and
+                        msg.circles[0].center.y >= (self.init_target_y - TARGET_MOVE_SAFETY_MARGIN)):
                         #Target is the correct !
                         self.target_x = msg.circles[0].center.x
                         self.target_y = msg.circles[0].center.y
                         self.init_target_x = msg.circles[0].center.x
                         self.init_target_y = msg.circles[0].center.y
                         print("Target is correct, set new position !")
+                        return
                     print("Target y position is not possible")
+                    return
                 print("Target x position is not possible")
+                print("x pos = ", msg.circles[0].center.x)
+                print(" + = ", self.init_target_x + TARGET_MOVE_SAFETY_MARGIN)
+                print(" - = ", self.init_target_x - TARGET_MOVE_SAFETY_MARGIN)
+                return
             print("Target radius is not possible")
+            print("true_radius = ", msg.circles[0].true_radius)
+            print(" + = ", TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN)
+            print(" - = ", TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN)
+            return
 
         #Many targets found
         elif len(msg.circles) > 1 and self.init_state == False:
             print(len(msg.circles), "Targets found")
             #Finding the right target
-            for try_target in range(len(msg.circles)):
+            for try_target in range(len(msg.circles)-1):
                 #Radius is possible ?
-                if ( msg.circles[try_target].true_radius <= (TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN) and 
-                    msg.circles[try_target].true_radius >= (TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN) ):
+                if (msg.circles[try_target].true_radius <= (TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN) and 
+                    msg.circles[try_target].true_radius >= (TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN)):
                     #Target x position is possible ?
-                    if ( msg.circles[try_target].center.x <= (self.init_target_x + TARGET_MOVE_SAFETY_MARGIN) and
-                        msg.circles[try_target].center.x >= (self.init_target_x - TARGET_MOVE_SAFETY_MARGIN) ):
+                    if (msg.circles[try_target].center.x <= (self.init_target_x + TARGET_MOVE_SAFETY_MARGIN) and
+                        msg.circles[try_target].center.x >= (self.init_target_x - TARGET_MOVE_SAFETY_MARGIN)):
                         #Target y position is possible ?
-                        if ( msg.circles[try_target].center.y <= (self.init_target_y + TARGET_MOVE_SAFETY_MARGIN) and
-                            msg.circles[try_target].center.y >= (self.init_target_y - TARGET_MOVE_SAFETY_MARGIN) ):
+                        if (msg.circles[try_target].center.y <= (self.init_target_y + TARGET_MOVE_SAFETY_MARGIN) and
+                            msg.circles[try_target].center.y >= (self.init_target_y - TARGET_MOVE_SAFETY_MARGIN)):
                             #Target is the correct !
                             self.target_x = msg.circles[try_target].center.x
                             self.target_y = msg.circles[try_target].center.y
                             self.init_target_x = msg.circles[try_target].center.x
                             self.init_target_y = msg.circles[try_target].center.y
                             print("Target ", try_target, " is correct, set new position !")
+                            return
                         print("Target ", try_target, " y position is not possible")
+                        return
                     print("Target ", try_target, " x position is not possible")
+                    return
                 print("Target ", try_target, " radius is not possible")
+                return
 
 
 class Robot():
