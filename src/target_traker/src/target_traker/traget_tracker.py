@@ -9,27 +9,55 @@ from move_base_msgs.msg import MoveBaseActionFeedback
 from geometry_msgs.msg import Twist
 
 #Constantes
-TARGET_RADIUS = 0.2
+TARGET_RADIUS = 0.27
 TARGET_RADIUS_SAFETY_MARGIN = 0.1
-TARGET_MOVE_SAFETY_MARGIN = 0.25
+TARGET_MOVE_SAFETY_MARGIN = 0.25 #Use to know if it's the good target
+TARGET_SAME_POS_SAFETY_MARGIN = 0.1
 
 state = 0
 
 class Target():
 
     def __init__(self):
-        self.target_x = 0
-        self.target_y = 0
         self.target_radius = TARGET_RADIUS
         self.current_target_pos_x = 0
         self.current_target_pos_y = 0
         self.init_state = True
+        self.target_move = True
+        self.target_move_count = 0
         self.target_pos_sub = rospy.Subscriber(
             '/raw_obstacles', Obstacles, self.target_callback
         )
 
+    
+    def target_not_move(self, new_pos_x, new_pos_y):
+        print("yooooooooooooooooooooooooooooo")
+        if (new_pos_x <= self.current_target_pos_x + TARGET_SAME_POS_SAFETY_MARGIN and
+            new_pos_x >= self.current_target_pos_x - TARGET_SAME_POS_SAFETY_MARGIN and
+            new_pos_y <= self.current_target_pos_y + TARGET_SAME_POS_SAFETY_MARGIN and
+            new_pos_y >= self.current_target_pos_y - TARGET_SAME_POS_SAFETY_MARGIN):
+
+            if (self.target_move_count == 0):
+                self.target_move_count = 1
+                print("same position 1")
+                return True
+            
+            elif (self.target_move_count == 1):
+                self.target_move_count = 2
+                print("same position 2")
+                return True
+            
+            elif (self.target_move_count == 2):
+                self.target_move_count = 3
+                print("same position 3")
+                self.target_move = False
+                return True
+        else:
+            print("target move")
+            return False
+
+
     def target_callback(self, msg):
-        print("ok")
         #Target not find
         if not msg.circles:
             print("target not find")
@@ -49,6 +77,7 @@ class Target():
             print("inital position y = ", self.current_target_pos_y)
             return
 
+
         #Target found
         elif len(msg.circles) == 1 and self.init_state == False:
             print("target found !")
@@ -62,8 +91,11 @@ class Target():
                     if (msg.circles[0].center.y <= (self.current_target_pos_y + TARGET_MOVE_SAFETY_MARGIN) and
                         msg.circles[0].center.y >= (self.current_target_pos_y - TARGET_MOVE_SAFETY_MARGIN)):
                         #Target is the correct !
-                        self.target_x = msg.circles[0].center.x
-                        self.target_y = msg.circles[0].center.y
+                        #Target move ? if false : reset the counter, else : target has not moved several 
+                        #times in a raw 
+                        if self.target_not_move(msg.circles[0].center.x, msg.circles[0].center.y) == False:
+                            self.target_move_count = 0
+                        #Target set new position
                         self.current_target_pos_x = msg.circles[0].center.x
                         self.current_target_pos_y = msg.circles[0].center.y
                         print("Target is correct, set new position !")
@@ -96,8 +128,10 @@ class Target():
                         if (msg.circles[try_target].center.y <= (self.current_target_pos_y + TARGET_MOVE_SAFETY_MARGIN) and
                             msg.circles[try_target].center.y >= (self.current_target_pos_y - TARGET_MOVE_SAFETY_MARGIN)):
                             #Target is the correct !
-                            self.target_x = msg.circles[try_target].center.x
-                            self.target_y = msg.circles[try_target].center.y
+                            #Target move ? if false : reset the counter, else : target has not moved several 
+                            #times in a raw 
+                            if self.target_not_move(msg.circles[try_target].center.x, msg.circles[try_target].center.y) == False:
+                                self.target_move_count = 0
                             self.current_target_pos_x = msg.circles[try_target].center.x
                             self.current_target_pos_y = msg.circles[try_target].center.y
                             print("Target ", try_target, " is correct, set new position !")
@@ -158,6 +192,17 @@ if __name__ == "__main__":
             time.sleep(2)
             print("Go to the target")
             nav_goals.go_to((target.current_target_pos_x - 0.21), (target.current_target_pos_y - 0.21), 0)
+            if target.target_move == False:
+                print("Target not move")
+                state = 2
+        
+        elif state == 2:
+            while nav_goals.is_arrived() == False:
+                time.sleep(1)
+            
+            #if target is arrived, wait 3s and go to the initial position
+            time.sleep(3)
+            nav_goals.go_to(robot.initial_pos_x, robot.initial_pos_y, 0)
 
     rospy.spin()
                 
