@@ -9,7 +9,7 @@ from move_base_msgs.msg import MoveBaseActionFeedback
 from geometry_msgs.msg import Twist
 
 #Constantes
-TARGET_RADIUS = 0.27
+TARGET_RADIUS = 0.26
 TARGET_RADIUS_SAFETY_MARGIN = 0.1
 TARGET_MOVE_SAFETY_MARGIN = 0.25 #Use to know if it's the good target
 TARGET_SAME_POS_SAFETY_MARGIN = 0.1
@@ -176,7 +176,7 @@ if __name__ == "__main__":
                 None
             print("Target initialization done !")
 
-            nav_goals.go_to((target.current_target_pos_x - 0.21), (target.current_target_pos_y - 0.21), 0)
+            nav_goals.go_to((target.current_target_pos_x - 0.35), (target.current_target_pos_y - 0.35), 0)
 
             time.sleep(1)
 
@@ -191,18 +191,18 @@ if __name__ == "__main__":
         elif state == 1:
             time.sleep(2)
             print("Go to the target")
-            nav_goals.go_to((target.current_target_pos_x - 0.21), (target.current_target_pos_y - 0.21), 0)
+            nav_goals.go_to((target.current_target_pos_x - 0.35), (target.current_target_pos_y - 0.35), 0)
             if target.target_move == False:
                 print("Target not move")
                 state = 2
         
         elif state == 2:
-            while nav_goals.is_arrived() == False:
-                time.sleep(1)
-            
-            #if target is arrived, wait 3s and go to the initial position
-            time.sleep(3)
-            nav_goals.go_to(robot.initial_pos_x, robot.initial_pos_y, 0)
+            time.sleep(1)
+            if nav_goals.is_arrived() == True: 
+                print("Robot has arrived near to the target")
+                #if target is arrived, wait 3s and go to the initial position
+                time.sleep(3)
+                nav_goals.go_to(robot.initial_pos_x, robot.initial_pos_y, 0)
 
     rospy.spin()
                 
