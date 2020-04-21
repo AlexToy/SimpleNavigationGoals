@@ -11,7 +11,7 @@ from geometry_msgs.msg import Twist
 #Constantes
 TARGET_RADIUS = 0.26
 TARGET_RADIUS_SAFETY_MARGIN = 0.1
-TARGET_MOVE_SAFETY_MARGIN = 0.25 #Use to know if it's the good target
+TARGET_MOVE_SAFETY_MARGIN = 3 #Use to know if it's the good target
 TARGET_SAME_POS_SAFETY_MARGIN = 0.1
 
 state = 0
@@ -23,37 +23,53 @@ class Target():
         self.current_target_pos_x = 0
         self.current_target_pos_y = 0
         self.init_state = True
-        self.target_move = True
+        self._not_move = False
         self.target_move_count = 0
+        self.start_timer_test_move = 0
+        self.current_timer_test_move = 0
+        self.timer_test_move = 0
+        self.test_target_pos_x = 0
+        self.test_target_pos_y = 0
         self.target_pos_sub = rospy.Subscriber(
             '/raw_obstacles', Obstacles, self.target_callback
         )
 
     
     def target_not_move(self, new_pos_x, new_pos_y):
-        print("yooooooooooooooooooooooooooooo")
-        if (new_pos_x <= self.current_target_pos_x + TARGET_SAME_POS_SAFETY_MARGIN and
-            new_pos_x >= self.current_target_pos_x - TARGET_SAME_POS_SAFETY_MARGIN and
-            new_pos_y <= self.current_target_pos_y + TARGET_SAME_POS_SAFETY_MARGIN and
-            new_pos_y >= self.current_target_pos_y - TARGET_SAME_POS_SAFETY_MARGIN):
+        self.current_timer_test_move = time.time()
+        #First call, set the timer and the target position
+        #Return false because we don't know if the target has moved
+        if self.target_move_count == 0:
+            self.start_timer_test_move = time.time()
+            self.test_target_pos_x = self.current_target_pos_x
+            self.test_target_pos_y = self.current_target_pos_y
+            self.target_move_count = 1
+            print("Target_not_move() : First call")
+            return False
 
-            if (self.target_move_count == 0):
-                self.target_move_count = 1
-                print("same position 1")
+        #Second call after 3sec
+        elif (self.target_move_count == 1 and
+            (self.current_timer_test_move - self.start_timer_test_move) >= 3.0):
+
+            #if the target has not moved, return true, reset the counter and the timer for the next call
+            if (new_pos_x <= self.test_target_pos_x + TARGET_SAME_POS_SAFETY_MARGIN and
+                new_pos_x >= self.test_target_pos_x - TARGET_SAME_POS_SAFETY_MARGIN and
+                new_pos_y <= self.test_target_pos_y + TARGET_SAME_POS_SAFETY_MARGIN and
+                new_pos_y >= self.test_target_pos_y - TARGET_SAME_POS_SAFETY_MARGIN):
+                self.target_move_count = 0
+                self.timer_test_move = 0
+                print("Target_not_move() : Second call, target not move")
                 return True
-            
-            elif (self.target_move_count == 1):
-                self.target_move_count = 2
-                print("same position 2")
-                return True
-            
-            elif (self.target_move_count == 2):
-                self.target_move_count = 3
-                print("same position 3")
-                self.target_move = False
-                return True
+
+            #If the target has moved, return false, reset the counter and the timer for the next call
+            else:
+                self.target_move_count = 0
+                self.timer_test_move = 0
+                print("Target_not_move() : Second call, target move")
+                return False
+        
         else:
-            print("target move")
+            #Timer has not arrived to 3sec, return false
             return False
 
 
@@ -91,11 +107,9 @@ class Target():
                     if (msg.circles[0].center.y <= (self.current_target_pos_y + TARGET_MOVE_SAFETY_MARGIN) and
                         msg.circles[0].center.y >= (self.current_target_pos_y - TARGET_MOVE_SAFETY_MARGIN)):
                         #Target is the correct !
-                        #Target move ? if false : reset the counter, else : target has not moved several 
-                        #times in a raw 
-                        if self.target_not_move(msg.circles[0].center.x, msg.circles[0].center.y) == False:
-                            self.target_move_count = 0
-                        #Target set new position
+                        #Target move ?
+                        self._not_move = self.target_not_move(msg.circles[0].center.x, msg.circles[0].center.y)
+                        #Set the new target position
                         self.current_target_pos_x = msg.circles[0].center.x
                         self.current_target_pos_y = msg.circles[0].center.y
                         print("Target is correct, set new position !")
@@ -128,10 +142,9 @@ class Target():
                         if (msg.circles[try_target].center.y <= (self.current_target_pos_y + TARGET_MOVE_SAFETY_MARGIN) and
                             msg.circles[try_target].center.y >= (self.current_target_pos_y - TARGET_MOVE_SAFETY_MARGIN)):
                             #Target is the correct !
-                            #Target move ? if false : reset the counter, else : target has not moved several 
-                            #times in a raw 
-                            if self.target_not_move(msg.circles[try_target].center.x, msg.circles[try_target].center.y) == False:
-                                self.target_move_count = 0
+                            #Target move ?
+                            self._not_move = self.target_not_move(msg.circles[try_target].center.x, msg.circles[try_target].center.y)
+                            #Set the new target position
                             self.current_target_pos_x = msg.circles[try_target].center.x
                             self.current_target_pos_y = msg.circles[try_target].center.y
                             print("Target ", try_target, " is correct, set new position !")
@@ -192,9 +205,9 @@ if __name__ == "__main__":
             time.sleep(2)
             print("Go to the target")
             nav_goals.go_to((target.current_target_pos_x - 0.35), (target.current_target_pos_y - 0.35), 0)
-            if target.target_move == False:
+            if target._not_move == True:
                 print("Target not move")
-                state = 2
+                #state = 2
         
         elif state == 2:
             time.sleep(1)
