@@ -9,9 +9,10 @@ from move_base_msgs.msg import MoveBaseActionFeedback
 from geometry_msgs.msg import Twist
 
 #Constantes
-TARGET_RADIUS = 0.26
+TARGET_RADIUS = 0.2
 TARGET_RADIUS_SAFETY_MARGIN = 0.1
-TARGET_MOVE_SAFETY_MARGIN = 3 #Use to know if it's the good target
+TARGET_FAKE_RADIUS = TARGET_RADIUS + 0.2
+TARGET_MOVE_SAFETY_MARGIN = 1.7 #Use to know if it's the good target
 TARGET_SAME_POS_SAFETY_MARGIN = 0.1
 
 state = 0
@@ -44,7 +45,7 @@ class Target():
             self.test_target_pos_x = self.current_target_pos_x
             self.test_target_pos_y = self.current_target_pos_y
             self.target_move_count = 1
-            print("Target_not_move() : First call")
+            #print("Target_not_move() : First call")
             return False
 
         #Second call after 3sec
@@ -58,14 +59,14 @@ class Target():
                 new_pos_y >= self.test_target_pos_y - TARGET_SAME_POS_SAFETY_MARGIN):
                 self.target_move_count = 0
                 self.timer_test_move = 0
-                print("Target_not_move() : Second call, target not move")
+                #print("Target_not_move() : Second call, target not move")
                 return True
 
             #If the target has moved, return false, reset the counter and the timer for the next call
             else:
                 self.target_move_count = 0
                 self.timer_test_move = 0
-                print("Target_not_move() : Second call, target move")
+                #print("Target_not_move() : Second call, target move")
                 return False
         
         else:
@@ -76,7 +77,7 @@ class Target():
     def target_callback(self, msg):
         #Target not find
         if not msg.circles:
-            print("target not find")
+            #print("target not find")
             return
 
         #Initial target : Set the initial target pos 
@@ -96,7 +97,7 @@ class Target():
 
         #Target found
         elif len(msg.circles) == 1 and self.init_state == False:
-            print("target found !")
+            #print("target found !")
             #Radius is possible ?
             if (msg.circles[0].true_radius <= (TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN) and 
                 msg.circles[0].true_radius >= (TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN)):
@@ -112,24 +113,24 @@ class Target():
                         #Set the new target position
                         self.current_target_pos_x = msg.circles[0].center.x
                         self.current_target_pos_y = msg.circles[0].center.y
-                        print("Target is correct, set new position !")
+                        #print("Target is correct, set new position !")
                         return
-                    print("Target y position is not possible")
+                    #print("Target y position is not possible")
                     return
-                print("Target x position is not possible")
-                print("x pos = ", msg.circles[0].center.x)
-                print(" + = ", self.current_target_pos_x + TARGET_MOVE_SAFETY_MARGIN)
-                print(" - = ", self.current_target_pos_y - TARGET_MOVE_SAFETY_MARGIN)
+                #print("Target x position is not possible")
+                #print("x pos = ", msg.circles[0].center.x)
+                #print(" + = ", self.current_target_pos_x + TARGET_MOVE_SAFETY_MARGIN)
+                #print(" - = ", self.current_target_pos_y - TARGET_MOVE_SAFETY_MARGIN)
                 return
-            print("Target radius is not possible")
-            print("true_radius = ", msg.circles[0].true_radius)
-            print(" + = ", TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN)
-            print(" - = ", TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN)
+            #print("Target radius is not possible")
+            #print("true_radius = ", msg.circles[0].true_radius)
+            #print(" + = ", TARGET_RADIUS + TARGET_RADIUS_SAFETY_MARGIN)
+            #print(" - = ", TARGET_RADIUS - TARGET_RADIUS_SAFETY_MARGIN)
             return
 
         #Many targets found
         elif len(msg.circles) > 1 and self.init_state == False:
-            print(len(msg.circles), "Targets found")
+            #print(len(msg.circles), "Targets found")
             #Finding the right target
             for try_target in range(len(msg.circles)-1):
                 #Radius is possible ?
@@ -147,13 +148,13 @@ class Target():
                             #Set the new target position
                             self.current_target_pos_x = msg.circles[try_target].center.x
                             self.current_target_pos_y = msg.circles[try_target].center.y
-                            print("Target ", try_target, " is correct, set new position !")
+                            #print("Target ", try_target, " is correct, set new position !")
                             return
-                        print("Target ", try_target, " y position is not possible")
+                        #print("Target ", try_target, " y position is not possible")
                         return
-                    print("Target ", try_target, " x position is not possible")
+                    #print("Target ", try_target, " x position is not possible")
                     return
-                print("Target ", try_target, " radius is not possible")
+                #print("Target ", try_target, " radius is not possible")
                 return
 
 
@@ -167,12 +168,27 @@ class Robot():
         )
         self.pos_x = []
         self.pos_y = []
+        self.current_robot_pos_x = 0
+        self.current_robot_pos_y = 0
     
     def robot_feedback(self, msg):
         #add the current position to the robot position list
         data = msg.feedback.base_position.pose
         self.pos_x.append(data.position.x)
         self.pos_y.append(data.position.y)
+        self.current_robot_pos_x = data.position.x
+        self.current_robot_pos_y = data.position.y
+
+
+def new_target_coordonates(target_x, target_y, robot_x, robot_y):
+    delta_x = target_x - robot_x
+    delta_y = target_y - robot_y
+    hypotenuse = math.sqrt(delta_x*delta_x + delta_y*delta_y) - (math.sqrt(delta_x*delta_x + delta_y*delta_y) - TARGET_FAKE_RADIUS)
+    theta = math.atan2(delta_x,delta_y)
+    new_x = target_x + math.sin(theta)*hypotenuse
+    new_y = target_y + math.cos(theta)*hypotenuse
+
+    return new_x, new_y
 
 
 if __name__ == "__main__":
@@ -204,7 +220,10 @@ if __name__ == "__main__":
         elif state == 1:
             time.sleep(2)
             print("Go to the target")
-            nav_goals.go_to((target.current_target_pos_x - 0.35), (target.current_target_pos_y - 0.35), 0, 60, "map", False)
+            print("robot x,y :", robot.current_robot_pos_x,robot.current_robot_pos_y)
+            print("target x,y :", target.current_target_pos_x,target.current_target_pos_y)
+            x, y = new_target_coordonates(target.current_target_pos_x, target.current_target_pos_y, robot.current_robot_pos_x, robot.current_robot_pos_y)
+            nav_goals.go_to(x, y, 0, 60, "map", False)
             if target._not_move == True:
                 print("Target not move")
                 #state = 2
