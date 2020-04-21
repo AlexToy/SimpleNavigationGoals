@@ -189,7 +189,7 @@ if __name__ == "__main__":
                 None
             print("Target initialization done !")
 
-            nav_goals.go_to((target.current_target_pos_x - 0.35), (target.current_target_pos_y - 0.35), 0)
+            nav_goals.go_to((target.current_target_pos_x - 0.35), (target.current_target_pos_y - 0.35), 0, 60, "map", False)
 
             time.sleep(1)
 
@@ -204,7 +204,7 @@ if __name__ == "__main__":
         elif state == 1:
             time.sleep(2)
             print("Go to the target")
-            nav_goals.go_to((target.current_target_pos_x - 0.35), (target.current_target_pos_y - 0.35), 0)
+            nav_goals.go_to((target.current_target_pos_x - 0.35), (target.current_target_pos_y - 0.35), 0, 60, "map", False)
             if target._not_move == True:
                 print("Target not move")
                 #state = 2
