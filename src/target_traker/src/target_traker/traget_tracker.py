@@ -9,7 +9,7 @@ from move_base_msgs.msg import MoveBaseActionFeedback
 from geometry_msgs.msg import Twist
 
 #Constantes
-TARGET_RADIUS = 0.2
+TARGET_RADIUS = 0.22
 TARGET_RADIUS_SAFETY_MARGIN = 0.1
 TARGET_FAKE_RADIUS = TARGET_RADIUS + 0.2
 TARGET_MOVE_SAFETY_MARGIN = 1.7 #Use to know if it's the good target
@@ -181,12 +181,13 @@ class Robot():
 
 
 def new_target_coordonates(target_x, target_y, robot_x, robot_y):
-    delta_x = target_x - robot_x
-    delta_y = target_y - robot_y
+    #hestimate a position near the target 
+    delta_x = math.fabs(target_x) - math.fabs(robot_x)
+    delta_y = math.fabs(target_y) - math.fabs(robot_y)
     hypotenuse = math.sqrt(delta_x*delta_x + delta_y*delta_y) - (math.sqrt(delta_x*delta_x + delta_y*delta_y) - TARGET_FAKE_RADIUS)
     theta = math.atan2(delta_x,delta_y)
-    new_x = target_x + math.sin(theta)*hypotenuse
-    new_y = target_y + math.cos(theta)*hypotenuse
+    new_x = target_x + math.sin(theta)*hypotenuse # sign + because 'map' y axes is in the sens south -> north
+    new_y = target_y - math.cos(theta)*hypotenuse # sign - because 'map' y axes is in the sens east -> west
 
     return new_x, new_y
 
@@ -220,13 +221,11 @@ if __name__ == "__main__":
         elif state == 1:
             time.sleep(2)
             print("Go to the target")
-            print("robot x,y :", robot.current_robot_pos_x,robot.current_robot_pos_y)
-            print("target x,y :", target.current_target_pos_x,target.current_target_pos_y)
             x, y = new_target_coordonates(target.current_target_pos_x, target.current_target_pos_y, robot.current_robot_pos_x, robot.current_robot_pos_y)
             nav_goals.go_to(x, y, 0, 60, "map", False)
             if target._not_move == True:
                 print("Target not move")
-                #state = 2
+                state = 2
         
         elif state == 2:
             time.sleep(1)
