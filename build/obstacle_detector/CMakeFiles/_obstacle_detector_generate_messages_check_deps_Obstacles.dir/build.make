@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/alex/catkin_ws/build
 include obstacle_detector/CMakeFiles/_obstacle_detector_generate_messages_check_deps_Obstacles.dir/progress.make
 
 obstacle_detector/CMakeFiles/_obstacle_detector_generate_messages_check_deps_Obstacles:
-	cd /home/alex/catkin_ws/build/obstacle_detector && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/melodic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py obstacle_detector /home/alex/catkin_ws/src/obstacle_detector/msg/Obstacles.msg obstacle_detector/CircleObstacle:obstacle_detector/SegmentObstacle:geometry_msgs/Point:geometry_msgs/Vector3:std_msgs/Header
+	cd /home/alex/catkin_ws/build/obstacle_detector && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/melodic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py obstacle_detector /home/alex/catkin_ws/src/obstacle_detector/msg/Obstacles.msg geometry_msgs/Vector3:obstacle_detector/SegmentObstacle:obstacle_detector/CircleObstacle:std_msgs/Header:geometry_msgs/Point
 
 _obstacle_detector_generate_messages_check_deps_Obstacles: obstacle_detector/CMakeFiles/_obstacle_detector_generate_messages_check_deps_Obstacles
 _obstacle_detector_generate_messages_check_deps_Obstacles: obstacle_detector/CMakeFiles/_obstacle_detector_generate_messages_check_deps_Obstacles.dir/build.make

@@ -2,17 +2,15 @@
 import rospy
 import math
 import time
-from sensor_msgs.msg import LaserScan
 from obstacle_detector.msg._Obstacles import Obstacles
 from simple_navigation_goals import simple_navigation_goals
 from move_base_msgs.msg import MoveBaseActionFeedback
-from geometry_msgs.msg import Twist
 
 #Constantes
-TARGET_RADIUS = 0.22
-TARGET_RADIUS_SAFETY_MARGIN = 0.1
-TARGET_FAKE_RADIUS = TARGET_RADIUS + 0.2
-TARGET_MOVE_SAFETY_MARGIN = 1.7 #Use to know if it's the good target
+TARGET_RADIUS = 0.25
+TARGET_RADIUS_SAFETY_MARGIN = 0.05
+TARGET_FAKE_RADIUS = TARGET_RADIUS + 0.4
+TARGET_MOVE_SAFETY_MARGIN = 1.0 #Use to know if it's the good target
 TARGET_SAME_POS_SAFETY_MARGIN = 0.1
 
 state = 0
@@ -197,7 +195,6 @@ if __name__ == "__main__":
     nav_goals = simple_navigation_goals.SimpleNavigationGoals()
     target = Target()
     robot = Robot()
-    twist = Twist()
 
     while True:
         #time.sleep(0.1)
@@ -232,7 +229,6 @@ if __name__ == "__main__":
             if nav_goals.is_arrived() == True: 
                 print("Robot has arrived near to the target")
                 #if target is arrived, wait 3s and go to the initial position
-                time.sleep(3)
                 nav_goals.go_to(robot.initial_pos_x, robot.initial_pos_y, 0)
 
     rospy.spin()

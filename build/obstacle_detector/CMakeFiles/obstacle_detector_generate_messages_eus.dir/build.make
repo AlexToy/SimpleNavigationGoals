@@ -61,8 +61,8 @@ obstacle_detector/CMakeFiles/obstacle_detector_generate_messages_eus: /home/alex
 
 /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/CircleObstacle.l: /opt/ros/melodic/lib/geneus/gen_eus.py
 /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/CircleObstacle.l: /home/alex/catkin_ws/src/obstacle_detector/msg/CircleObstacle.msg
-/home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/CircleObstacle.l: /opt/ros/melodic/share/geometry_msgs/msg/Point.msg
 /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/CircleObstacle.l: /opt/ros/melodic/share/geometry_msgs/msg/Vector3.msg
+/home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/CircleObstacle.l: /opt/ros/melodic/share/geometry_msgs/msg/Point.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/alex/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from obstacle_detector/CircleObstacle.msg"
 	cd /home/alex/catkin_ws/build/obstacle_detector && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/alex/catkin_ws/src/obstacle_detector/msg/CircleObstacle.msg -Iobstacle_detector:/home/alex/catkin_ws/src/obstacle_detector/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -p obstacle_detector -o /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg
 
@@ -74,11 +74,11 @@ obstacle_detector/CMakeFiles/obstacle_detector_generate_messages_eus: /home/alex
 
 /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /opt/ros/melodic/lib/geneus/gen_eus.py
 /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /home/alex/catkin_ws/src/obstacle_detector/msg/Obstacles.msg
-/home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /home/alex/catkin_ws/src/obstacle_detector/msg/CircleObstacle.msg
-/home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /home/alex/catkin_ws/src/obstacle_detector/msg/SegmentObstacle.msg
-/home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /opt/ros/melodic/share/geometry_msgs/msg/Point.msg
 /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /opt/ros/melodic/share/geometry_msgs/msg/Vector3.msg
+/home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /home/alex/catkin_ws/src/obstacle_detector/msg/SegmentObstacle.msg
+/home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /home/alex/catkin_ws/src/obstacle_detector/msg/CircleObstacle.msg
 /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /opt/ros/melodic/share/std_msgs/msg/Header.msg
+/home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg/Obstacles.l: /opt/ros/melodic/share/geometry_msgs/msg/Point.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/alex/catkin_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp code from obstacle_detector/Obstacles.msg"
 	cd /home/alex/catkin_ws/build/obstacle_detector && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/alex/catkin_ws/src/obstacle_detector/msg/Obstacles.msg -Iobstacle_detector:/home/alex/catkin_ws/src/obstacle_detector/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/melodic/share/geometry_msgs/cmake/../msg -p obstacle_detector -o /home/alex/catkin_ws/devel/share/roseus/ros/obstacle_detector/msg
 
