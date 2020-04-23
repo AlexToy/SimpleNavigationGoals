@@ -8,7 +8,7 @@ from move_base_msgs.msg import MoveBaseActionFeedback
 
 #Constantes
 TARGET_RADIUS = 0.25
-TARGET_RADIUS_SAFETY_MARGIN = 0.05
+TARGET_RADIUS_SAFETY_MARGIN = 0.1
 TARGET_FAKE_RADIUS = TARGET_RADIUS + 0.4
 TARGET_MOVE_SAFETY_MARGIN = 1.0 #Use to know if it's the good target
 TARGET_SAME_POS_SAFETY_MARGIN = 0.1
